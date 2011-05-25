@@ -2,8 +2,47 @@ require 'spec_helper'
 
 describe UsersController do
 	render_views
+	
+  describe "GET 'show'" do
+	
+	before(:each) do
+	  @user = Factory(:user)
+	end
+	
+	it "should be successful" do
+	  # Rails automatically converts the user object to the corresponding id.
+	  get :show, :id => @user 
+	  response.should be_success
+	end
+	
+	it "should find the right user" do
+	  get :show, :id => @user 
+	  assigns(:user).should == @user
+	end	
+	
+	it "should have the right title" do
+	  get :show, :id => @user
+	  response.should have_selector("title", :content => @user.name)
+	end
+	
+	it "should include the user's name" do
+	  get :show, :id => @user
+	  response.should have_selector("h1", :content => @user.name)
+	end
+	
+	it "should have a profile image" do
+	  get :show, :id => @user
+	  response.should have_selector("h1>img", :class => "gravatar")
+	end
+	
+	it "shuld have a sidebar" do
+	  get :show, :id => @user
+	  response.should have_selector("td", :class => "sidebar round")
+	end
+  end
+  
 
-  describe "GET 'new'" do
+  describe "GET 'new'" do 
   
     it "should be successful" do
       get 'new'
@@ -11,8 +50,8 @@ describe UsersController do
     end
 	
 	it "should have the right title" do
-	get 'new'
-	response.should have_selector("title", :content => "Sign up")
+	  get 'new'
+	  response.should have_selector("title", :content => "Sign up")
 	end
 	
   end
