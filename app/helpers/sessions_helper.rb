@@ -1,7 +1,7 @@
 module SessionsHelper
 
 	def sign_in(user)
-		cookies.permanent.signed[	:remember_token] = [user.id, user.salt]
+		cookies.permanent.signed[:remember_token] = [user.id, user.salt]
 											
 		cookies.signed[:prova] = {	:value => "hello cookie",
 									:expires => 1.hour.from_now}
