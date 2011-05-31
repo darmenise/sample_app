@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
 
 
   attr_accessor 	:password
+  before_save :encrypt_password
   
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
  
@@ -40,7 +41,7 @@ class User < ActiveRecord::Base
   #My original fix to my "shuld have a password confirmation" spec!
   validates :password_confirmation, :presence => true
 	
-  before_save :encrypt_password
+  
   
   #Return true if the user's password matches the submitted password.
   def has_password?(submitted_password)

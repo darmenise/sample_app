@@ -26,11 +26,25 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
   
-	#CUSTOM METHODS
+	#CUSTOM METHODS (HELPERS)
   
 	def test_sign_in(user)
 		controller.sign_in(user)
 	end
-  
-  
+	
+	def integration_sign_in(user)
+		visit signin_path
+		fill_in :email, 	:with => user.email
+		fill_in :password, 	:with => user.password
+		click_button
+	end  
+	
+	def integration_sign_up(user_hash)
+		visit signup_path
+		fill_in "Name",         :with => user_hash[:name]
+		fill_in "Email",        :with => user_hash[:email]
+		fill_in "Password",     :with => user_hash[:password]
+		fill_in "Confirmation", :with => user_hash[:confirmation]
+		click_button
+	end 
 end

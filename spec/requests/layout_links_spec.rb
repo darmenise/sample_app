@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "LayoutLinks" do
+describe "Layout links" do
  
 	it "should have a Home page at '/'" do
 		get '/'
@@ -55,10 +55,7 @@ describe "LayoutLinks" do
    
 		before(:each) do
 			@user = Factory(:user)
-			visit signin_path
-			fill_in :email, :with => @user.email
-			fill_in :password, :with => @user.password
-			click_button
+			integration_sign_in(@user)	
 		end
 		
 		it "should have a signout link" do
