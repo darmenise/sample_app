@@ -54,7 +54,7 @@ describe UsersController do
 			end
 			
 			#Exercise 10.6.4
-			it "should not see any 'destroy' link" do
+			it "should not see any 'delete' link" do
 				get :index
 				@users[0..2].each do |user|
 					response.should_not have_selector("a", 	:title => "Delete #{user.name}",
@@ -68,18 +68,26 @@ describe UsersController do
 		describe "for admin users" do
 			
 			before(:each) do
-				admin = Factory(:user, :email => "admin@example.com", :admin => true)
-				test_sign_in(admin)
-				@users = []
-				30.times do
+				@admin = Factory(:user, :name => "Admin Name",
+										:email => "admin@example.com", 
+										:admin => true)
+				test_sign_in(@admin)
+				@users = [@admin]
+				4.times do
 					@users << Factory(:user, :email => Factory.next(:email))
 				end
 			end
 			
-			it "should see a 'destroy' link for each registered user" do
+			it "should see a 'delete' link for each registered user" do
 				get :index
-				@users[0..2].each do |user|
-					response.should have_selector("a", :content => "delete")
+				@users.each do |user|
+					if user.is_not @admin
+					response.should	 	have_selector("a", 	:title => "Delete #{user.name}",
+															:content => "delete") 
+					else
+					response.should_not have_selector("a", 	:title => "Delete #{user.name}",
+															:content => "delete") 
+					end
 				end	
 			end
 		

@@ -61,6 +61,11 @@ class User < ActiveRecord::Base
 	(user && user.salt == cookie_salt) ? user : nil
   end
   
+  #Exercise 10.6.4
+  def is_not(some_user)
+	self != some_user
+  end
+  
 	#private methods  	
 	private
 	  
