@@ -2,6 +2,8 @@ class UsersController < ApplicationController
 	before_filter :authenticate, :only => [:index, :edit, :update, :destroy]
 	before_filter :correct_user, :only => [:edit, :update]
 	before_filter :admin_user, 	 :only => :destroy
+	before_filter :signed_in,	 :only => [:new, :create]
+
 	
 	#Here the :page parameter comes from params[:page], 
 	#which is generated automatically by will_paginate gem
@@ -53,8 +55,13 @@ class UsersController < ApplicationController
 	end
 	
 	def destroy
-		User.find(params[:id]).destroy
-		flash[:success] = "User destroyed."
+		if !current_user?(User.find(params[:id]))	
+			User.find(params[:id]).destroy
+			flash[:success] = "User destroyed."
+		else
+			flash[:error] = "Please, stop thinkin about self-destruction!"
+			
+		end
 		redirect_to users_path
 	end
 	
@@ -71,5 +78,10 @@ class UsersController < ApplicationController
 		
 		def admin_user
 			redirect_to(root_path) unless current_user.admin?
+		end
+		
+		#Exercise 10.6.3
+		def signed_in
+			redirect_to(root_path, :notice => "You are already signed-in!") if signed_in?
 		end
 end
