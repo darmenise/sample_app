@@ -10,3 +10,8 @@ end
 Factory.sequence :email do |n|
 	"person-#{n}@example.com"
 end
+
+#Exercise 10.6
+Factory.sequence :name do |n|
+	"Name-#{n} Surname-#{n}"
+end

@@ -72,23 +72,28 @@ describe UsersController do
 										:email => "admin@example.com", 
 										:admin => true)
 				test_sign_in(@admin)
-				@users = [@admin]
+				@users = []
+				@users << @admin				
 				4.times do
-					@users << Factory(:user, :email => Factory.next(:email))
+					@users << Factory(:user, 	:name 	=> Factory.next(:name),
+												:email 	=> Factory.next(:email))
 				end
 			end
 			
-			it "should see a 'delete' link for each registered user" do
+			it "should see a 'delete' link for each registered user except himself" do
 				get :index
 				@users.each do |user|
 					if user.is_not @admin
 					response.should	 	have_selector("a", 	:title => "Delete #{user.name}",
 															:content => "delete") 
-					else
-					response.should_not have_selector("a", 	:title => "Delete #{user.name}",
-															:content => "delete") 
 					end
 				end	
+			end
+			
+			it "should not see a 'delete' link for himself" do
+				get :index
+				response.should_not 	have_selector("a", 	:title => "Delete #{@admin.name}",
+															:content => "delete") 
 			end
 		
 		end
