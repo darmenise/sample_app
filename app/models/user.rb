@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20110524121357
+# Schema version: 20110601145118
 #
 # Table name: users
 #
@@ -10,6 +10,7 @@
 #  updated_at         :datetime
 #  encrypted_password :string(255)
 #  salt               :string(255)
+#  admin              :boolean
 #
 
 require 'digest'
@@ -22,6 +23,7 @@ class User < ActiveRecord::Base
 
 
   attr_accessor 	:password
+  
   before_save :encrypt_password
   
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
