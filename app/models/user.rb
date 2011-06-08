@@ -16,13 +16,15 @@
 require 'digest'
 class User < ActiveRecord::Base
   
+  #attributes editable through the web
   attr_accessible 	:name, 
 					:email, 
 					:password, 
 					:password_confirmation
 
-
   attr_accessor 	:password
+  
+  has_many :microposts, :dependent => :destroy
   
   before_save :encrypt_password
   
@@ -64,6 +66,11 @@ class User < ActiveRecord::Base
   #Exercise 10.6.4
   def is_not(some_user)
 	self != some_user
+  end
+  
+  def feed
+		#This is preliminary.
+		Micropost.where("user_id = ?", id) #equivalent to writing "microposts"
   end
   
 	#private methods  	

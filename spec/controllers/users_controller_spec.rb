@@ -72,8 +72,7 @@ describe UsersController do
 										:email => "admin@example.com", 
 										:admin => true)
 				test_sign_in(@admin)
-				@users = []
-				@users << @admin				
+				@users = [@admin]				
 				4.times do
 					@users << Factory(:user, 	:name 	=> Factory.next(:name),
 												:email 	=> Factory.next(:email))
@@ -136,6 +135,15 @@ describe UsersController do
 		  get :show, :id => @user
 		  response.should have_selector("td", :class => "sidebar round")
 		end
+		
+		it "should show the user's microposts" do
+			mp1 = Factory(:micropost, :user => @user, :content => "Foo bar")
+			mp2 = Factory(:micropost, :user => @user, :content => "Baz quux")
+			get :show, :id => @user
+			response.should have_selector("span.content", :content => mp1.content)
+			response.should have_selector("span.content", :content => mp2.content)
+		end
+		
 	end
 
 	describe "GET 'new'" do 
